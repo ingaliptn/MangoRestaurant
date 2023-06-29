@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Mango.Services.API.Models.Dto
+namespace Mango.Web.Models.Dto
 {
     public class ResponseDto
     {
