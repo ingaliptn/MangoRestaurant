@@ -1,24 +1,29 @@
-﻿using System;
+﻿using Mango.Web.Models;
+using Mango.Web.Models.Dto;
+using Mango.Web.Services.IServices;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Mango.Web.Models;
-using Mango.Web.Models.Dto;
-using Mango.Web.Services.IServices;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Mango.Web.Controllers
 {
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
-        // GET: /<controller>/
+        public ProductController(IProductService productService)
+        {
+            _productService = productService;
+        }
+
         public async Task<IActionResult> ProductIndex()
         {
             List<ProductDto> list = new();
+            //var accessToken = await HttpContext.GetTokenAsync("access_token");
             var response = await _productService.GetAllProductsAsync<ResponseDto>();
             if (response != null && response.IsSuccess)
             {

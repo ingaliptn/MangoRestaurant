@@ -1,12 +1,15 @@
-﻿using System;
-using Mango.Web.Models;
+﻿using Mango.Web.Models;
 using Mango.Web.Services.IServices;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Mango.Web.Services
 {
     public class ProductService : BaseService, IProductService
     {
-
         private readonly IHttpClientFactory _clientFactory;
 
         public ProductService(IHttpClientFactory clientFactory) : base(clientFactory)
@@ -23,7 +26,6 @@ namespace Mango.Web.Services
                 Url = SD.ProductAPIBase + "/api/products",
                 AccessToken = ""
             });
-
         }
 
         public async Task<T> DeleteProductAsync<T>(int id)
@@ -31,17 +33,7 @@ namespace Mango.Web.Services
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = SD.ProductAPIBase + "/api/products" + id,
-                AccessToken = ""
-            });
-        }
-
-        public async Task<T> GetAllProductByIdAsync<T>(int id)
-        {
-            return await this.SendAsync<T>(new ApiRequest()
-            {
-                ApiType = SD.ApiType.GET,
-                Url = SD.ProductAPIBase + "/api/products" + id,
+                Url = SD.ProductAPIBase + "/api/products/" + id,
                 AccessToken = ""
             });
         }
@@ -52,6 +44,16 @@ namespace Mango.Web.Services
             {
                 ApiType = SD.ApiType.GET,
                 Url = SD.ProductAPIBase + "/api/products",
+                AccessToken = ""
+            });
+        }
+
+        public async Task<T> GetProductByIdAsync<T>(int id)
+        {
+            return await this.SendAsync<T>(new ApiRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = SD.ProductAPIBase + "/api/products/" + id,
                 AccessToken = ""
             });
         }
@@ -68,4 +70,3 @@ namespace Mango.Web.Services
         }
     }
 }
-
