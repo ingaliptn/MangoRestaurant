@@ -36,7 +36,7 @@ namespace Mango.Services.API.Repository
         {
             try
             {
-                Product product = await _db.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
+                Product product = await _db.Products.Where(x => x.ProductId == productId).FirstOrDefaultAsync();//.FirstOrDefaultAsync(x => x.ProductId == productId);
                 if (product == null)
                 {
                     return false;
