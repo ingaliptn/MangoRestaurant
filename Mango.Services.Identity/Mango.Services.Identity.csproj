@@ -19,8 +19,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="DbContext\" />
+    <None Remove="Initializer\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DbContext\" />
+    <Folder Include="Initializer\" />
   </ItemGroup>
 </Project>

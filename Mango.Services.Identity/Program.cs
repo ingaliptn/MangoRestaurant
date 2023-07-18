@@ -1,5 +1,6 @@
 ﻿using Mango.Services.Identity;
 using Mango.Services.Identity.DbContext;
+using Mango.Services.Identity.Initializer;
 using Mango.Services.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,14 @@ builder.Services.AddIdentityServer(options =>
 .AddAspNetIdentity<ApplicationUser>()
 .AddDeveloperSigningCredential(); //////////question
 
+//builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+
+builder.Services.AddScoped<IDbInitializer, DbInitializer>(); //can be placed among other "AddScoped" - above: var app = builder.Build();   
+
+
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -35,7 +43,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+//var dbInitializer = app.Services.GetRequiredService<IDbInitializer>();
+// use dbInitializer
+
 app.UseHttpsRedirection();
+
+SeedDatabase();//////
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -43,10 +57,21 @@ app.UseRouting();
 app.UseIdentityServer();
 
 app.UseAuthorization();
+//dbInitializer.Initialize();
+void SeedDatabase() //can be placed at the very bottom under app.Run()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}
+
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
 
