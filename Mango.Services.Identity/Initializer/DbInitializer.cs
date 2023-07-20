@@ -4,6 +4,7 @@ using IdentityModel;
 using Mango.Services.Identity.DbContext;
 using Mango.Services.Identity.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mango.Services.Identity.Initializer
 {
@@ -22,6 +23,19 @@ namespace Mango.Services.Identity.Initializer
 
         public void Initialize()
         {
+            try
+            {
+                if (_db.Database.GetPendingMigrations().Count() > 0)
+                {
+                    _db.Database.Migrate();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
             if (_roleManager.FindByIdAsync(SD.Admin).Result == null)
             {
                 _roleManager.CreateAsync(new IdentityRole(SD.Admin)).GetAwaiter().GetResult();
