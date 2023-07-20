@@ -2,15 +2,16 @@
 using Mango.Web.Services;
 using Mango.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+IdentityModelEventSource.ShowPII = true;
 
-// Add services to the container.
-//builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<IProductService, ProductService>();
 SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
+
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -49,7 +50,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 
-app.UseAuthentication(); ////////
+app.UseAuthentication();
 
 
 app.UseAuthorization();

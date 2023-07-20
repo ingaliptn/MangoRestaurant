@@ -19,17 +19,6 @@ public class HomeController : Controller
         return View();
     }
 
-    [Authorize]
-    public IActionResult Login()
-    {
-        return RedirectToAction(nameof(Index));
-    }
-
-    public IActionResult Logout()
-    {
-        return SignOut("Cookies", "iodc");
-    }
-
     public IActionResult Privacy()
     {
         return View();
@@ -39,6 +28,17 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    [Authorize]
+    public IActionResult Login()
+    {
+        return RedirectToAction(nameof(Index));
+    }
+
+    public IActionResult Logout()
+    {
+        return SignOut("Cookies", "iodc");
     }
 }
 

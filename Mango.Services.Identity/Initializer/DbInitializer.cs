@@ -17,34 +17,18 @@ namespace Mango.Services.Identity.Initializer
         public DbInitializer(ApplicationDbContext db, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _db = db;
-            _userManager = userManager;
             _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public void Initialize()
         {
-            try
-            {
-                if (_db.Database.GetPendingMigrations().Count() > 0)
-                {
-                    _db.Database.Migrate();
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-
-            if (_roleManager.FindByIdAsync(SD.Admin).Result == null)
+            if (_roleManager.FindByNameAsync(SD.Admin).Result == null)
             {
                 _roleManager.CreateAsync(new IdentityRole(SD.Admin)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Customer)).GetAwaiter().GetResult();
             }
-            else
-            {
-                return;
-            }
+            else { return; }
 
             ApplicationUser adminUser = new ApplicationUser()
             {
@@ -61,7 +45,7 @@ namespace Mango.Services.Identity.Initializer
 
             var temp1 = _userManager.AddClaimsAsync(adminUser, new Claim[]
             {
-                new Claim(JwtClaimTypes.Name,adminUser.FirstName+" "+adminUser.LastName),
+                new Claim(JwtClaimTypes.Name,adminUser.FirstName + " " + adminUser.LastName),
                 new Claim(JwtClaimTypes.GivenName,adminUser.FirstName),
                 new Claim(JwtClaimTypes.FamilyName,adminUser.LastName),
                 new Claim(JwtClaimTypes.Role,SD.Admin),
@@ -82,7 +66,7 @@ namespace Mango.Services.Identity.Initializer
 
             var temp2 = _userManager.AddClaimsAsync(customerUser, new Claim[]
             {
-                new Claim(JwtClaimTypes.Name,customerUser.FirstName+" "+customerUser.LastName),
+                new Claim(JwtClaimTypes.Name,customerUser.FirstName + " " + customerUser.LastName),
                 new Claim(JwtClaimTypes.GivenName,customerUser.FirstName),
                 new Claim(JwtClaimTypes.FamilyName,customerUser.LastName),
                 new Claim(JwtClaimTypes.Role,SD.Customer),

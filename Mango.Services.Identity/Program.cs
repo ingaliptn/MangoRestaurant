@@ -9,8 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 builder.Services.AddIdentityServer(options =>
@@ -23,8 +25,8 @@ builder.Services.AddIdentityServer(options =>
 }).AddInMemoryIdentityResources(SD.IdentityResources)
 .AddInMemoryApiScopes(SD.ApiScopes)
 .AddInMemoryClients(SD.Clients)
-.AddAspNetIdentity<ApplicationUser>()
-.AddDeveloperSigningCredential(); //////////question
+.AddAspNetIdentity<ApplicationUser>().AddDeveloperSigningCredential();
+//////////question
 
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
@@ -44,10 +46,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-SeedDatabase();
+
 app.UseIdentityServer();
 
 app.UseAuthorization();
+SeedDatabase();
 
 app.MapControllerRoute(
     name: "default",

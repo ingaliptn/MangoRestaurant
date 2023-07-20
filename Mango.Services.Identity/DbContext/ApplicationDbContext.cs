@@ -11,8 +11,6 @@ namespace Mango.Services.Identity.DbContext
         {
 
         }
-
-
     }
 }
 
